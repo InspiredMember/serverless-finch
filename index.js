@@ -33,7 +33,7 @@ class Client {
     this.provider = 'aws';
     this.aws = this.serverless.getProvider(this.provider);
 
-    this.version = Date.now();
+    this.version = process.env.FINCH_DEPLOY_VERSION;
 
     this.commands = {
       client: {
@@ -272,7 +272,7 @@ class Client {
     return this.listBuckets()
       .then(this.findBucket)
       .then(this.listObjectsInBucket)
-      .then(this.deleteObjectsFromBucket)
+      //.then(this.deleteObjectsFromBucket)
       .then(createBucket)
       .then(configureBucket)
       .then(configurePolicyForBucket)
@@ -304,8 +304,12 @@ class Client {
 
   _uploadFile(filePath) {
     let _this      = this,
-        fileKey    = this.version + '/' + filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
+        fileKey    = filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
         urlRoot    = regionToUrlRootMap(_this.region);
+
+    if (this.version) {
+      fileKey = this.version + '/' + fileKey;
+    }
 
     this.serverless.cli.log(`Uploading file ${fileKey} to bucket ${_this.bucketName}...`);
     this.serverless.cli.log('If successful this should be deployed at:')
