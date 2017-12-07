@@ -33,6 +33,8 @@ class Client {
     this.provider = 'aws';
     this.aws = this.serverless.getProvider(this.provider);
 
+    this.version = Date.now();
+
     this.commands = {
       client: {
         usage: 'Generate and deploy clients',
@@ -302,7 +304,7 @@ class Client {
 
   _uploadFile(filePath) {
     let _this      = this,
-        fileKey    = filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
+        fileKey    = this.version + filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
         urlRoot    = regionToUrlRootMap(_this.region);
 
     this.serverless.cli.log(`Uploading file ${fileKey} to bucket ${_this.bucketName}...`);
