@@ -304,7 +304,7 @@ class Client {
 
   _uploadFile(filePath) {
     let _this      = this,
-        fileKey    = this.version + filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
+        fileKey    = this.version + '/' + filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
         urlRoot    = regionToUrlRootMap(_this.region);
 
     this.serverless.cli.log(`Uploading file ${fileKey} to bucket ${_this.bucketName}...`);
