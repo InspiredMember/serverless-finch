@@ -33,8 +33,6 @@ class Client {
     this.provider = 'aws';
     this.aws = this.serverless.getProvider(this.provider);
 
-    this.version = process.env.FINCH_DEPLOY_VERSION;
-
     this.commands = {
       client: {
         usage: 'Generate and deploy clients',
@@ -142,8 +140,8 @@ class Client {
       .then(this.listBuckets)
       .then(this.findBucket)
       .then(this.listObjectsInBucket)
-      .then(this.deleteObjectsFromBucket)
-      .then(deleteBucket)
+      //.then(this.deleteObjectsFromBucket)
+      //.then(deleteBucket)
   }
 
   _validateAndPrepare() {
@@ -165,6 +163,7 @@ class Client {
 
     this.bucketName = this.serverless.service.custom.client.bucketName;
     this.clientPath = clientPath;
+    this.versionFolder = _.get(this.serverless, 'service.custom.client.versionFolder');
 
     return BbPromise.resolve();
   }
@@ -275,7 +274,7 @@ class Client {
       //.then(this.deleteObjectsFromBucket)
       .then(createBucket)
       .then(configureBucket)
-      .then(configurePolicyForBucket)
+      //.then(configurePolicyForBucket)
       .then(configureCorsForBucket)
       .then(function(){
         return this._uploadDirectory(this.clientPath)
@@ -307,8 +306,8 @@ class Client {
         fileKey    = filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
         urlRoot    = regionToUrlRootMap(_this.region);
 
-    if (this.version) {
-      fileKey = this.version + '/' + fileKey;
+    if (this.versionFolder) {
+      fileKey = path.join(this.versionFolder, fileKey);
     }
 
     this.serverless.cli.log(`Uploading file ${fileKey} to bucket ${_this.bucketName}...`);
