@@ -259,7 +259,7 @@ class Client {
         Bucket: this.bucketName,
         CORSConfiguration: {
           CORSRules: [
-            putPostDeleteRule,
+            //putPostDeleteRule,
             getRule
           ]
         },
@@ -306,10 +306,6 @@ class Client {
         fileKey    = filePath.replace(_this.clientPath, '').substr(1).replace(/\\/g, '/'),
         urlRoot    = regionToUrlRootMap(_this.region);
 
-    if (this.versionFolder) {
-      fileKey = path.join(this.versionFolder, fileKey);
-    }
-
     this.serverless.cli.log(`Uploading file ${fileKey} to bucket ${_this.bucketName}...`);
     this.serverless.cli.log('If successful this should be deployed at:')
     this.serverless.cli.log(`http://${_this.bucketName}.${urlRoot}/${fileKey}`)
@@ -322,6 +318,11 @@ class Client {
         Body: fileBuffer,
         ContentType: mime.lookup(filePath)
       };
+
+      if (this.versionFolder) {
+        let versionParams = Object.extend({}, params, {fileKey: path.join(this.versionFolder, fileKey)});
+        _this.aws.request('S3', 'putObject', versionParams, _this.stage, _this.region);
+      }
 
       // TODO: remove browser caching
       return _this.aws.request('S3', 'putObject', params, _this.stage, _this.region);
