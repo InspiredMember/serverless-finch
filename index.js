@@ -320,7 +320,7 @@ class Client {
       };
 
       if (_this.versionFolder) {
-        let versionParams = _.extend({}, params, {fileKey: path.join(_this.versionFolder, fileKey)});
+        let versionParams = _.extend({}, params, {Key: path.join(_this.versionFolder, fileKey)});
         _this.aws.request('S3', 'putObject', versionParams, _this.stage, _this.region);
       }
 
