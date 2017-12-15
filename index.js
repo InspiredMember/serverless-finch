@@ -319,7 +319,7 @@ class Client {
         ContentType: mime.lookup(filePath)
       };
 
-      if (this.versionFolder) {
+      if (_this.versionFolder) {
         let versionParams = Object.extend({}, params, {fileKey: path.join(this.versionFolder, fileKey)});
         _this.aws.request('S3', 'putObject', versionParams, _this.stage, _this.region);
       }
