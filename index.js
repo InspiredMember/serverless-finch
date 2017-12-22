@@ -190,7 +190,7 @@ class Client {
         Bucket: this.bucketName,
         WebsiteConfiguration: {
           IndexDocument: { Suffix: 'index.html' },
-          ErrorDocument: { Key: 'error.html' }
+          ErrorDocument: { Key: 'index.html' }
         }
       };
 
