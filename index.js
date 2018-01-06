@@ -274,7 +274,7 @@ class Client {
       //.then(this.deleteObjectsFromBucket)
       .then(createBucket)
       .then(configureBucket)
-      //.then(configurePolicyForBucket)
+      .then(configurePolicyForBucket)
       .then(configureCorsForBucket)
       .then(function(){
         return this._uploadDirectory(this.clientPath)
